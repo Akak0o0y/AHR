@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Generated artifacts (regenerable from src/)
+outputs/logs/*
+!outputs/logs/.gitkeep
+outputs/compose_test/*
+!outputs/compose_test/.gitkeep
+outputs/predict_preview/
+
+# Synthetic corpora are NOT committed — they are large (35-130 MB) and fully
+# regenerable from src/synth_corpus.py against the dictionary. See README §Quickstart.
+data/synth/*.npz
+
+# Large raw dump (re-fetchable via `python src/dictionary.py fetch`)
+data/raw/kaikki_arabic.jsonl
