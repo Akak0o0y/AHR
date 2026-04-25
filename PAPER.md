@@ -165,9 +165,25 @@ The 47k-unseen-word generalization is the headline result. A model that had memo
 
 ### 4.3 Sample-grid qualitative inspection
 
-A 24-sample random grid (Figure 1, see `outputs/figures/samples_grid.png` in the repository) shows correct predictions on words including `كتاب، علم، مطبخ، قمر، صديق، استيقظ، بنفسجي`. The remaining mismatches are entirely due to the alphabet normalization documented in PROJECT.md §3.6 (`أ→ا`, `ة→ه`, `ى→ي`, hamza dropped) — predictions and ground-truth differ only in surface forms that the canonical 28-letter alphabet collapses by design.
+![Figure 1: 24 random synth corpus samples with the trained CRNN's predictions next to the ground-truth Arabic word and its English gloss. Predictions are correct on the vast majority; the few apparent mismatches are normalization-equivalent (e.g. ground-truth أربعة becomes prediction اربعه, where the canonical 28-letter alphabet collapses أ to ا and ة to ه by design). The handwriting style is consistent across the grid because all glyph samples come from a single source.](outputs/figures/samples_grid.png)
 
-### 4.4 Real-world evaluation (negative result, honest)
+### 4.4 Glyph-bank coverage
+
+The composer draws every letter shape from the bank shown below: 28 Arabic letters in their available positional forms (Isolated / Initial / Medial / Final), 97 unique cells from 100 source samples after the addition of one Initial-ب sample (described in §3.1).
+
+![Figure 2: Every (letter, form) cell in the 100-sample handwritten letter bank. Each cell shows one representative glyph; the augmentation stack inside GlyphBank.sample produces a fresh-looking variation on every call.](outputs/figures/glyph_bank.png)
+
+### 4.5 Composer smoke output
+
+To make the kashida-aware composition concrete, Figure 3 shows the result of running `compose_word` on eight test words (`كتاب، مدرسة، كرسي، وردة، بيت، محمد، سلام، علم`). All letters within each word sit on a single baseline row, and the kashida ink is continuous from one letter to the next thanks to the tip-to-tip docking described in §3.2. The visible discontinuities (e.g. between م and د in مدرسة) are intentional PAW (Piece of Arabic Word) breaks where a non-connector letter (د) terminates the run.
+
+![Figure 3: compose_word output on eight Arabic test words showing the joined kashida baseline. Words appear in pixel-array order (first letter at the right edge of each cell, since Arabic reads RTL); discontinuities are PAW breaks at non-connector letters.](outputs/figures/compose_test_grid.png)
+
+![Figure 4: The bank's three-then-four ب samples: Isolated, Initial, Medial, Final. The Initial sample was added via add_to_bank.py to fix the disconnected-ب-at-word-start failure mode (§3.1). Compare its left-side kashida tail (the tatweel that connects to the next letter) against the closed bowl of the Isolated form.](outputs/figures/glyph_bank_ب.png)
+
+The remaining mismatches in Figure 1 are entirely due to the alphabet normalization documented in PROJECT.md §3.6 (`أ→ا`, `ة→ه`, `ى→ي`, hamza dropped) — predictions and ground-truth differ only in surface forms that the canonical 28-letter alphabet collapses by design.
+
+### 4.6 Real-world evaluation (negative result, honest)
 
 Three real handwritten word images (light blue ink on cream paper, photographed; ground-truth words `مدينة، شعر، حلو`) were tested across 12 preprocessing variants each (4 rotations × 3 contrast modes including Otsu binarization). 0/36 correct. The model's output distribution collapsed to its most-frequent letters (م، ه، ك، ش) regardless of input.
 
