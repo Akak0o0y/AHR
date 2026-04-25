@@ -1,6 +1,6 @@
 # KashidaSynth: Topology-Preserving Pixel-Level Synthesis for Bootstrapping Arabic Word OCR from a Minimal Letter Bank
 
-**Author:** Abdulaziz Al-Ka'aby
+**Author:** Abdulaziz AL-Dhamri
 
 **Affiliation:** Independent Research
 
@@ -17,6 +17,12 @@ We present an open-source pipeline that bootstraps an Arabic handwritten word re
 ---
 
 ## 1. Introduction
+
+### Background: what a kashida is
+
+Arabic is a *cursive* script — letters within a word are joined along a baseline by a horizontal stroke called a **kashida** (Arabic: كَشِيدة, also called *tatweel*, U+0640). Unlike Latin scripts where letters are independent units that sit beside each other, every Arabic letter physically connects to its neighbors via this baseline stroke, and each letter takes one of four **positional forms** depending on whether it appears at the start, middle, end, or in isolation. Six letters (ا د ذ ر ز و, plus ة) are *non-connectors* that break the run and force the next letter to restart in its initial form, segmenting words into PAWs (Pieces of Arabic Words). Because the kashida runs between letters along the baseline, correctly placing the connection point — both vertically (on the baseline row) and horizontally (where the previous glyph's ink ends) — is the load-bearing geometric problem in image-based handwriting synthesis.
+
+### The data scarcity problem
 
 Offline Arabic handwriting recognition is constrained by the cost of labeled corpora. Public datasets (IFN/ENIT, KHATT, AHCD) are limited in size relative to Latin equivalents, and real-world systems often need to adapt to a single user's handwriting, a single domain (e.g. legal or medical forms), or a single document collection (e.g. a historical manuscript) where only a small number of samples is realistically available.
 
@@ -57,10 +63,10 @@ We formalize the kashida topology of each form via a fixed table:
 
 | Form | Carries left kashida | Carries right kashida |
 |---|---|---|
-| Isolated | ✗ | ✗ |
-| Initial  | ✓ | ✗ |
-| Medial   | ✓ | ✓ |
-| Final    | ✗ | ✓ |
+| Isolated | No  | No  |
+| Initial  | Yes | No  |
+| Medial   | Yes | Yes |
+| Final    | No  | Yes |
 
 In a left-to-right canvas (Arabic letters laid out before the global RTL flip), the **left** edge of the glyph faces the *next* letter, the **right** edge faces the *previous* letter. A form is a *valid fallback* for a requested form iff it carries kashidas on **at least the same sides** as the requested form. The fallback chains follow:
 
