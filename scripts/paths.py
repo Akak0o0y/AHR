@@ -25,7 +25,7 @@ REAL_TEST_DIR  = os.path.join(RAW_DIR, 'real_test')
 GLYPH_BANK_NPZ  = os.path.join(RAW_DIR, 'arabic_handwritten_dataset.npz')
 DICTIONARY_JSON = os.path.join(RAW_DIR, 'ar_dictionary.json')
 # Raw kaikki dump is only kept around when actively building the dictionary.
-# `python src/dictionary.py fetch` re-downloads it; keep this constant so the
+# `python scripts/dictionary.py fetch` re-downloads it; keep this constant so the
 # fetcher knows where to write.
 KAIKKI_JSONL    = os.path.join(RAW_DIR, 'kaikki_arabic.jsonl')
 

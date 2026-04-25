@@ -11,9 +11,9 @@ This script applies the same preprocessing to ANY input image (any size,
 any format), runs the model, and prints the greedy CTC decoding.
 
 Usage:
-    python src/predict.py path/to/word.png
-    python src/predict.py path/to/word.png --no-invert     # don't auto-invert
-    python src/predict.py path/to/dir/                     # batch on a folder
+    python scripts/predict.py path/to/word.png
+    python scripts/predict.py path/to/word.png --no-invert     # don't auto-invert
+    python scripts/predict.py path/to/dir/                     # batch on a folder
 """
 from __future__ import annotations
 import argparse, sys, io, os

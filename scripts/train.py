@@ -8,8 +8,8 @@ Pipeline:
     → save crnn_arabic.keras
 
 Run:
-    python src/train.py --corpus data/synth/synth_corpus_dict.npz --epochs 25
-    python src/train.py --smoke                                     # 1-epoch sanity check
+    python scripts/train.py --corpus data/synth/synth_corpus_dict.npz --epochs 25
+    python scripts/train.py --smoke                                     # 1-epoch sanity check
 
 History note: the original main() used EarlyStopping with a validation split.
 On small synth corpora the val_loss climbs from epoch 2 onward (small val set

@@ -3,10 +3,10 @@
 Two modes:
 
 1. Single file:
-    python src/add_to_bank.py path/to/img.png ب Initial
+    python scripts/add_to_bank.py path/to/img.png ب Initial
 
 2. Directory (batch — file names encode (char, form), e.g. `ب_Initial_01.png`):
-    python src/add_to_bank.py path/to/dir/
+    python scripts/add_to_bank.py path/to/dir/
 
 Pre-processing matches the rest of the bank:
   - Convert to single-channel grayscale.

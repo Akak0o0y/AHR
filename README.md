@@ -29,7 +29,7 @@ AHR/
 │   ├── expert_best.keras       Letter-form classifier (CNN backbone donor)
 │   └── crnn_arabic_5k.keras    Word OCR CRNN (latest)
 │
-├── src/                        Importable modules + entry-point scripts
+├── scripts/                    Essential scripts to run the model
 │   ├── paths.py                Canonical path constants
 │   ├── solution.py             CRNN architecture, alphabet, encode/decode, CTC loss
 │   ├── glyph_bank.py           Letter-bank lookup with topology-preserving fallback
@@ -39,10 +39,7 @@ AHR/
 │   ├── add_to_bank.py          Append new (letter, form) samples to the bank
 │   ├── train.py                CRNN training (no early stop, no val split)
 │   ├── test_crnn.py            Accuracy + CER evaluation
-│   ├── predict.py              Single-image inference (image → word)
-│   ├── predict_real.py         Multi-variant predictor (rotation × contrast)
-│   ├── show_samples.py         Render sample-grid PNG with predictions
-│   └── show_glyph_bank.py      Visualize bank coverage by (letter, form)
+│   └── predict.py              Single-image inference (image → word)
 │
 ├── notebooks/                  Jupyter exploration + notebook utilities
 │
@@ -58,43 +55,40 @@ All scripts use absolute paths anchored at this repo, so they work from any cwd:
 
 ```bash
 # 1. (One-time) Build the dictionary — ~40 MB gzipped download, 55k entries
-python src/dictionary.py fetch
+python scripts/dictionary.py fetch
 
 # 2. Generate synth corpus from EVERY renderable dictionary entry (1 sample/word)
-python src/synth_corpus.py --from_dict --dictionary data/raw/ar_dictionary.json \
+python scripts/synth_corpus.py --from_dict --dictionary data/raw/ar_dictionary.json \
     --samples_per_word 1 --out data/synth/synth_corpus_dict.npz
 
 # 3. Smoke-train the CRNN (1 epoch sanity check)
-python src/train.py --smoke --corpus data/synth/synth_corpus_dict.npz
+python scripts/train.py --smoke --corpus data/synth/synth_corpus_dict.npz
 
 # 4. Full training (no early stop, ReduceLROnPlateau on train loss)
-python src/train.py --corpus data/synth/synth_corpus_5k.npz --epochs 25
+python scripts/train.py --corpus data/synth/synth_corpus_5k.npz --epochs 25
 
 # 5. Evaluate accuracy + character error rate
-python src/test_crnn.py
+python scripts/test_crnn.py
 
-# 6. Render a sample grid with predictions
-python src/show_samples.py
-
-# 7. Inference on one image
-python src/predict.py path/to/word.png
+# 6. Inference on one image
+python scripts/predict.py path/to/word.png
 ```
 
 ## Adding new letter samples to the bank
 
 ```bash
 # Single file — explicit (letter, form):
-python src/add_to_bank.py path/to/img.png ب Initial
+python scripts/add_to_bank.py path/to/img.png ب Initial
 
 # Or batch — filenames encode (letter, form), e.g. ب_Initial_01.png:
-python src/add_to_bank.py data/raw/new_glyphs/
+python scripts/add_to_bank.py data/raw/new_glyphs/
 ```
 
 The original bank is auto-backed up to `*.bak.npz` before the first append.
 
 ## Path conventions
 
-`src/paths.py` is the single source of truth for filesystem locations.
+`scripts/paths.py` is the single source of truth for filesystem locations.
 To relocate any artifact (e.g. point at a different glyph bank or a different
 canonical model), edit `paths.py` rather than chasing string literals.
 
